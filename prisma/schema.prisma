@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- NOSSOS MODELOS ---
+
+model User {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(100)
+  email         String          @unique @db.VarChar(150)
+  password      String          @db.VarChar(255)
+  createdAt     DateTime        @default(now()) @map("created_at")
+
+  createdGroups   Group[]         @relation("CreatedBy")
+  tasksResponsible Task[]
+  comments        Comment[]
+  notifications   Notification[]
+  groups          GroupUser[]
+
+  @@map("users")
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  createdBy Int      @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  creator User          @relation("CreatedBy", fields: [createdBy], references: [id], onDelete: Cascade)
+  tasks   Task[]
+  users   GroupUser[]
+  comments Comment[]
+
+  @@map("groups")
+}
+
+model GroupUser {
+  groupId Int @map("group_id")
+  userId  Int @map("user_id")
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, userId])
+  @@map("group_users")
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  titulo      String    @db.VarChar(200)
+  description String?   @db.Text
+  status      String    @default("pendente") @db.VarChar(50)
+  responsavel Int?
+  grupoId     Int       @map("grupo_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  group         Group     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  responsibleUser User?   @relation(fields: [responsavel], references: [id], onDelete: SetNull)
+  comments      Comment[]
+
+  @@map("tasks")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  groupId   Int      @map("group_id")
+  taskId    Int      @map("task_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  content   String   @db.Text
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  task  Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Notification {
+  id       Int      @id @default(autoincrement())
+  userId   Int      @map("user_id")
+  msg      String   @db.Text
+  sendDate DateTime @default(now()) @map("send_date")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
