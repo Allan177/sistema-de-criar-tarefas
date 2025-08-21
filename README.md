@@ -1,8 +1,3 @@
-Com certeza! Um README bem-feito é a documentação mais importante de um projeto. Com base em tudo que construímos, aqui está uma versão completa e detalhada para a sua Plataforma de Grupos de Estudo.
-
-Ele explica o propósito, as tecnologias, a arquitetura com os padrões de projeto que usamos, e como qualquer pessoa pode configurar e rodar a aplicação.
-
-Você pode copiar e colar o texto abaixo diretamente em um arquivo README.md na raiz do seu projeto.
 
 Plataforma de Grupos de Estudo - API Backend
 
@@ -136,7 +131,7 @@ download
 content_copy
 expand_less
 
-git clone https://seu-repositorio-aqui/bd_e_pp-backend.git
+git clone https://github.com/Allan177/sistema-de-criar-tarefas.git
 cd bd_e_pp-backend
 
 Instale as dependências:
@@ -164,7 +159,7 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 # URL de conexão do seu banco de dados PostgreSQL
-DATABASE_URL="postgresql://SEU_USUARIO:SUA_SENHA@SEU_HOST:PORTA/NOME_DO_BANCO?schema=public"
+DATABASE_URL="postgresql://neondb_owner:npg_ZPtb16jUlfaA@ep-delicate-bush-acd8lexz-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 
 # Porta em que a API será executada
 PORT=3333
@@ -251,6 +246,7 @@ IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
     "name": "Grupo de Estudos de Algoritmos",
+    
     "createdBy": 1 
 }
 
@@ -265,9 +261,13 @@ IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
     "id": 1,
+
     "name": "Grupo de Estudos de Algoritmos",
+
     "createdBy": 1,
+
     "createdAt": "2025-08-21T18:35:00.000Z",
+
     "users": [
         {
             "groupId": 1,
@@ -283,6 +283,7 @@ content_copy
 expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
+
 .
 ├── prisma/
 │   └── schema.prisma         # Definição do banco de dados (Models)
