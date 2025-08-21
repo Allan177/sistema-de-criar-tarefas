@@ -210,7 +210,9 @@ IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
     "name": "Estudante Exemplo",
+
     "email": "estudante@email.com",
+    
     "password": "senhaSegura123"
 }
 
@@ -229,7 +231,7 @@ IGNORE_WHEN_COPYING_END
     "name": "Estudante Exemplo",
 
     "email": "estudante@email.com",
-    
+
     "createdAt": "2025-08-21T18:30:00.000Z"
 }
 Criar um novo grupo
