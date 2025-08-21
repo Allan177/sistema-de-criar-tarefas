@@ -1,8 +1,3 @@
-Com certeza! Um README bem-feito é a documentação mais importante de um projeto. Com base em tudo que construímos, aqui está uma versão completa e detalhada para a sua Plataforma de Grupos de Estudo.
-
-Ele explica o propósito, as tecnologias, a arquitetura com os padrões de projeto que usamos, e como qualquer pessoa pode configurar e rodar a aplicação.
-
-Você pode copiar e colar o texto abaixo diretamente em um arquivo README.md na raiz do seu projeto.
 
 Plataforma de Grupos de Estudo - API Backend
 
