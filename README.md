@@ -1,155 +1,304 @@
+Com certeza! Um README bem-feito é a documentação mais importante de um projeto. Com base em tudo que construímos, aqui está uma versão completa e detalhada para a sua Plataforma de Grupos de Estudo.
 
-📚 Plataforma de Grupos de Estudo - API Backend
+Ele explica o propósito, as tecnologias, a arquitetura com os padrões de projeto que usamos, e como qualquer pessoa pode configurar e rodar a aplicação.
 
+Você pode copiar e colar o texto abaixo diretamente em um arquivo README.md na raiz do seu projeto.
 
+Plataforma de Grupos de Estudo - API Backend
 
+![alt text](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=node.js)
+![alt text](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
+![alt text](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express)
+![alt text](https://img.shields.io/badge/Prisma-5.x-2D3748?style=for-the-badge&logo=prisma)
+![alt text](https://img.shields.io/badge/PostgreSQL-14-336791?style=for-the-badge&logo=postgresql)
 
+API RESTful desenvolvida como o backend para uma plataforma de estudos colaborativa. O objetivo é permitir que alunos criem grupos, gerenciem tarefas e interajam de forma organizada, promovendo o aprendizado coletivo.
 
+Tabela de Conteúdos
 
-API RESTful para gerenciar grupos de estudo, tarefas e interações entre alunos, proporcionando uma organização colaborativa e autônoma.
-
-📑 Sumário
 Sobre o Projeto
 
-Tecnologias
+Tecnologias Utilizadas
 
-Arquitetura
+Arquitetura e Padrões de Projeto
+
+Model-View-Controller (MVC)
+
+Padrão Repository
+
+Padrão Service Layer (Camada de Serviço)
+
+Injeção de Dependência (Dependency Injection)
+
+Começando
+
+Pré-requisitos
 
 Instalação
 
 Uso da API
 
+Criar um novo usuário
+
+Criar um novo grupo
+
 Estrutura de Pastas
 
-🚀 Sobre o Projeto
-Este backend é o núcleo de uma plataforma voltada para colaboração acadêmica.
-Funcionalidades principais:
+Sobre o Projeto
 
-Cadastro e autenticação de usuários
+Este backend foi idealizado para ser o cérebro de uma plataforma digital que visa combater o baixo rendimento acadêmico através da colaboração. A ideia central é fornecer uma ferramenta onde os próprios alunos possam criar grupos de estudo, convidar colegas, atribuir e gerenciar tarefas de forma autônoma e descentralizada.
 
-Criação e gerenciamento de grupos
+A API é responsável por toda a lógica de negócio, gerenciamento de dados e incluindo:
 
-Criação, atribuição e atualização de tarefas
+Criação e gerenciamento de grupos e seus membros.
 
-Sistema planejado de comentários e notificações
+Tecnologias Utilizadas
 
-🛠 Tecnologias
-Node.js – Ambiente de execução JavaScript/TypeScript
+A seleção de tecnologias foi pensada para garantir um desenvolvimento moderno, escalável e de fácil manutenção.
 
-TypeScript – Tipagem estática para código mais robusto
+Node.js: Ambiente de execução que nos permite rodar TypeScript no lado do servidor.
 
-Express.js – Framework web minimalista
+TypeScript: Adiciona tipagem estática ao JavaScript, tornando o código mais robusto, legível e menos propenso a erros em tempo de execução.
 
-Prisma – ORM moderno para PostgreSQL
+Express.js: Framework minimalista para Node.js, usado para construir nossa API RESTful, gerenciar rotas e middlewares de forma eficiente.
 
-PostgreSQL – Banco de dados relacional
+Prisma: ORM (Object-Relational Mapper) moderno que simplifica drasticamente a interação com o banco de dados, gera tipos seguros a partir do schema e facilita as migrações.
 
-TSyringe – Injeção de dependência
+PostgreSQL: Um dos sistemas de gerenciamento de banco de dados relacional mais poderosos e confiáveis do mercado, ideal para a estrutura de dados relacional do nosso projeto.
 
-BcryptJS – Hash de senhas
+TSyringe: Um contêiner de Injeção de Dependência leve para TypeScript, essencial para desacoplar os componentes da nossa aplicação e facilitar os testes.
 
-Dotenv – Variáveis de ambiente
+BcryptJS: Biblioteca para fazer o hash de senhas, garantindo que elas sejam armazenadas de forma segura no banco de dados.
 
-🏗 Arquitetura
-MVC – Controllers recebem requisições, Services processam regras de negócio, Repositories cuidam do acesso a dados
+Dotenv: Módulo para carregar variáveis de ambiente a partir de um arquivo .env, mantendo dados sensíveis (como a URL do banco) fora do código-fonte.
 
-Repository Pattern – Abstração de acesso ao banco
+Arquitetura e Padrões de Projeto
 
-Service Layer – Centralização da lógica de negócio
+Para garantir que a aplicação seja organizada, testável e escalável, adotamos uma arquitetura modularizada com base em diversos padrões de projeto consolidados.
 
-Dependency Injection – Componentes desacoplados para melhor testabilidade
+Model-View-Controller (MVC)
 
-Observer Pattern (Planejado) – Notificações assíncronas via eventos
+O conceito de MVC foi adaptado para nossa API REST:
 
-📦 Instalação
-1️⃣ Pré-requisitos
-Node.js 18.x ou superior
+Model: Representado pelo Schema do Prisma (prisma/schema.prisma). Ele define a estrutura dos nossos dados (User, Group, Task, etc.) e suas relações.
 
-PostgreSQL em execução
+View: A "visão" em nossa API é a resposta JSON enviada ao cliente. Os Controllers são responsáveis por formatar e enviar essa resposta.
+
+Controller: Responsável por receber as requisições HTTP, validar os dados e orquestrar a resposta. Eles são a porta de entrada da nossa aplicação.
+
+Onde é usado: Nos arquivos *.controller.ts de cada módulo (ex: src/modules/users/user.controller.ts). A UserController manipula as rotas /users.
+
+Padrão Repository
+
+Este padrão abstrai e isola a camada de acesso aos dados. O resto da aplicação não precisa saber como as queries são executadas, apenas que existem métodos para buscar ou salvar dados.
+
+Como é usado: Criamos uma classe de repositório para cada entidade.
+
+Exemplo: A classe GroupsRepository (src/modules/groups/group.repository.ts) contém o método create, que é o único local que interage diretamente com o prisma.group para criar um novo grupo e adicionar seu primeiro membro. Isso centraliza a lógica de banco de dados e facilita os testes.
+
+Padrão Service Layer (Camada de Serviço)
+
+A camada de serviço fica entre os Controllers e os Repositórios e contém toda a lógica de negócio da aplicação.
+
+Como é usado: Cada módulo possui sua classe de serviço.
+
+Exemplo: No UserService (src/modules/users/user.service.ts), o método create implementa a regra de negócio de verificar se um e-mail já existe e de realizar o hash da senha antes de chamar o repositório para salvar o usuário.
+
+Injeção de Dependência (Dependency Injection)
+
+Em vez de uma classe criar suas próprias dependências, elas são "injetadas" de fora por um contêiner. Isso desacopla fortemente nossos componentes, melhora a modularidade e é fundamental para a testabilidade.
+
+Como é usado: Utilizamos a biblioteca TSyringe.
+
+Registro: No arquivo src/shared/container/index.ts, registramos nossas implementações (UsersRepository, GroupsRepository).
+
+Injeção: Nas classes de serviço, usamos os decoradores @injectable() e @inject('UsersRepository') no construtor para receber as dependências automaticamente, sem precisar instanciá-las manualmente.
+
+Começando
+
+Siga estas instruções para obter uma cópia do projeto e executá-lo em sua máquina local.
+
+Pré-requisitos
+
+Node.js (versão 18.x ou superior)
 
 NPM ou Yarn
 
-2️⃣ Clonar repositório
-bash
-Copiar
-Editar
+Uma instância de um banco de dados PostgreSQL em execução.
+
+Instalação
+
+Clone o repositório:
+
+code
+Bash
+download
+content_copy
+expand_less
+
 git clone https://seu-repositorio-aqui/bd_e_pp-backend.git
 cd bd_e_pp-backend
-3️⃣ Instalar dependências
-bash
-Copiar
-Editar
+
+Instale as dependências:
+
+code
+Bash
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 npm install
-4️⃣ Configurar variáveis de ambiente
-bash
-Copiar
-Editar
-# Windows
-copy .env.example .env
 
-# Linux/macOS
-cp .env.example .env
-Edite .env:
+Configure as variáveis de ambiente:
 
-env
-Copiar
-Editar
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_banco?schema=public"
+Crie uma cópia do arquivo .env.example (se houver) ou crie um novo arquivo chamado .env na raiz do projeto.
+
+Abra o arquivo .env e adicione a URL de conexão do seu banco de dados PostgreSQL.
+
+code
+Env
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
+# URL de conexão do seu banco de dados PostgreSQL
+DATABASE_URL="postgresql://SEU_USUARIO:SUA_SENHA@SEU_HOST:PORTA/NOME_DO_BANCO?schema=public"
+
+# Porta em que a API será executada
 PORT=3333
-5️⃣ Criar tabelas com Prisma
-bash
-Copiar
-Editar
+
+Execute as migrações do Prisma:
+Este comando irá ler seu schema.prisma e criar todas as tabelas no banco de dados.
+
+code
+Bash
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 npx prisma migrate dev --name init
-6️⃣ Iniciar servidor de desenvolvimento
-bash
-Copiar
-Editar
+
+Inicie o servidor de desenvolvimento:
+
+code
+Bash
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 npm run dev
-Servidor disponível em: http://localhost:3333
 
-📡 Uso da API
-Criar um usuário
-POST /api/v1/users
+O servidor estará em execução em http://localhost:3333.
 
-json
-Copiar
-Editar
+Uso da API
+
+A seguir, exemplos de como interagir com os endpoints já implementados.
+
+Criar um novo usuário
+
+Endpoint: POST /api/v1/users
+
+Descrição: Registra um novo usuário no sistema.
+
+Corpo da Requisição (Body):
+
+code
+JSON
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 {
-  "name": "Estudante Dedicado",
-  "email": "estudante@email.com",
-  "password": "senhaSegura123"
+    "name": "Estudante Exemplo",
+    "email": "estudante@email.com",
+    "password": "senhaSegura123"
 }
-Resposta de sucesso (201):
 
-json
-Copiar
-Editar
+Resposta de Sucesso (201 Created):
+
+code
+JSON
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 {
-  "id": 1,
-  "name": "Estudante Dedicado",
-  "email": "estudante@email.com",
-  "createdAt": "2025-08-12T15:00:00.000Z"
+    "id": 1,
+    "name": "Estudante Exemplo",
+    "email": "estudante@email.com",
+    "createdAt": "2025-08-21T18:30:00.000Z"
 }
-📂 Estrutura de Pastas
-pgsql
-Copiar
-Editar
+Criar um novo grupo
+
+Endpoint: POST /api/v1/groups
+
+Descrição: Cria um novo grupo de estudos. O usuário que cria o grupo é automaticamente adicionado como o primeiro membro.
+
+Corpo da Requisição (Body): É necessário que o createdBy seja um ID de um usuário existente.
+
+code
+JSON
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
+{
+    "name": "Grupo de Estudos de Algoritmos",
+    "createdBy": 1 
+}
+
+Resposta de Sucesso (201 Created):
+
+code
+JSON
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
+{
+    "id": 1,
+    "name": "Grupo de Estudos de Algoritmos",
+    "createdBy": 1,
+    "createdAt": "2025-08-21T18:35:00.000Z",
+    "users": [
+        {
+            "groupId": 1,
+            "userId": 1
+        }
+    ]
+}
+Estrutura de Pastas
+code
+Code
+download
+content_copy
+expand_less
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
 .
 ├── prisma/
-│   └── schema.prisma
+│   └── schema.prisma         # Definição do banco de dados (Models)
 ├── src/
-│   ├── modules/
-│   │   └── users/
-│   │       ├── user.controller.ts
-│   │       ├── user.dtos.ts
-│   │       ├── user.repository.ts
-│   │       ├── user.routes.ts
-│   │       └── user.service.ts
-│   ├── shared/
-│   │   ├── container/
-│   │   ├── database/
-│   │   └── http/
-├── .env
+│   ├── modules/              # Contêineres para cada recurso da aplicação
+│   │   ├── users/            # Exemplo de um módulo
+│   │   │   ├── user.controller.ts
+│   │   │   ├── user.repository.ts
+│   │   │   ├── user.routes.ts
+│   │   │   └── user.service.ts
+│   │   └── groups/
+│   ├── shared/               # Código compartilhado entre os módulos
+│   │   ├── container/        # Configuração da Injeção de Dependência (TSyringe)
+│   │   ├── database/         # Conexão com o banco (Prisma)
+│   │   └── http/             # Configuração do Express (app, server, rotas)
+│   └── ...
+├── .env                      # Variáveis de ambiente (NÃO versionar)
 ├── package.json
 └── tsconfig.json
