@@ -209,10 +209,11 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
+
     "name": "Estudante Exemplo",
 
     "email": "estudante@email.com",
-    
+
     "password": "senhaSegura123"
 }
 
@@ -226,6 +227,7 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
+  
     "id": 1,
 
     "name": "Estudante Exemplo",
