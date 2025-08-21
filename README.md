@@ -7,7 +7,7 @@ Plataforma de Grupos de Estudo - API Backend
 ![alt text](https://img.shields.io/badge/Prisma-5.x-2D3748?style=for-the-badge&logo=prisma)
 ![alt text](https://img.shields.io/badge/PostgreSQL-14-336791?style=for-the-badge&logo=postgresql)
 
-API RESTful desenvolvida como o backend para uma plataforma de estudos colaborativa. O objetivo é permitir que alunos criem grupos, gerenciem tarefas e interajam de forma organizada, promovendo o aprendizado coletivo.
+API RESTful desenvolvida como o backend para uma plataforma de estudos colaborativa. O objetivo é permitir que alunos criem e gerenciem grupos, usuários e tarefas de forma organizada, promovendo o aprendizado coletivo.
 
 Tabela de Conteúdos
 
@@ -31,11 +31,11 @@ Pré-requisitos
 
 Instalação
 
-Uso da API
+Uso da API (Endpoints)
 
-Criar um novo usuário
+Endpoints de Usuários (/api/v1/users)
 
-Criar um novo grupo
+Endpoints de Grupos (/api/v1/groups)
 
 Estrutura de Pastas
 
@@ -43,71 +43,77 @@ Sobre o Projeto
 
 Este backend foi idealizado para ser o cérebro de uma plataforma digital que visa combater o baixo rendimento acadêmico através da colaboração. A ideia central é fornecer uma ferramenta onde os próprios alunos possam criar grupos de estudo, convidar colegas, atribuir e gerenciar tarefas de forma autônoma e descentralizada.
 
-A API é responsável por toda a lógica de negócio, gerenciamento de dados e incluindo:
+A API é responsável por toda a lógica de negócio, gerenciamento de dados e segurança, incluindo o CRUD (Create, Read, Update, Delete) completo para os principais recursos da aplicação:
 
-Criação e gerenciamento de grupos e seus membros.
+Usuários: Cadastro, listagem, busca, atualização e remoção de usuários.
+
+Grupos: Criação, listagem, busca, atualização e remoção de grupos de estudo.
 
 Tecnologias Utilizadas
 
-A seleção de tecnologias foi pensada para garantir um desenvolvimento moderno, escalável e de fácil manutenção.
-
 Node.js: Ambiente de execução que nos permite rodar TypeScript no lado do servidor.
 
-TypeScript: Adiciona tipagem estática ao JavaScript, tornando o código mais robusto, legível e menos propenso a erros em tempo de execução.
+TypeScript: Adiciona tipagem estática ao JavaScript, tornando o código mais robusto, legível e menos propenso a erros.
 
-Express.js: Framework minimalista para Node.js, usado para construir nossa API RESTful, gerenciar rotas e middlewares de forma eficiente.
+Express.js: Framework minimalista para construir nossa API RESTful, gerenciar rotas e middlewares de forma eficiente.
 
-Prisma: ORM (Object-Relational Mapper) moderno que simplifica drasticamente a interação com o banco de dados, gera tipos seguros a partir do schema e facilita as migrações.
+Prisma: ORM (Object-Relational Mapper) moderno que simplifica drasticamente a interação com o banco de dados, gera tipos seguros e facilita as migrações.
 
-PostgreSQL: Um dos sistemas de gerenciamento de banco de dados relacional mais poderosos e confiáveis do mercado, ideal para a estrutura de dados relacional do nosso projeto.
+PostgreSQL: Sistema de gerenciamento de banco de dados relacional poderoso e confiável, ideal para a estrutura de dados do nosso projeto.
 
-TSyringe: Um contêiner de Injeção de Dependência leve para TypeScript, essencial para desacoplar os componentes da nossa aplicação e facilitar os testes.
+TSyringe: Contêiner de Injeção de Dependência leve para TypeScript, essencial para desacoplar os componentes da nossa aplicação.
 
-BcryptJS: Biblioteca para fazer o hash de senhas, garantindo que elas sejam armazenadas de forma segura no banco de dados.
+BcryptJS: Biblioteca para fazer o hash de senhas, garantindo que elas sejam armazenadas de forma segura.
 
-Dotenv: Módulo para carregar variáveis de ambiente a partir de um arquivo .env, mantendo dados sensíveis (como a URL do banco) fora do código-fonte.
+Dotenv: Módulo para carregar variáveis de ambiente a partir de um arquivo .env.
 
 Arquitetura e Padrões de Projeto
 
-Para garantir que a aplicação seja organizada, testável e escalável, adotamos uma arquitetura modularizada com base em diversos padrões de projeto consolidados.
+Para garantir que a aplicação seja organizada, testável e escalável, adotamos uma arquitetura modularizada com base em diversos padrões de projeto. Cada padrão foi escolhido para resolver um problema específico e trazer benefícios claros.
 
 Model-View-Controller (MVC)
 
-O conceito de MVC foi adaptado para nossa API REST:
+O conceito de MVC foi adaptado para a nossa API REST, onde a principal função é a separação de responsabilidades.
 
-Model: Representado pelo Schema do Prisma (prisma/schema.prisma). Ele define a estrutura dos nossos dados (User, Group, Task, etc.) e suas relações.
+Model: Representado pelo Schema do Prisma (prisma/schema.prisma). Ele define a estrutura dos nossos dados (User, Group, etc.) e é a única fonte da verdade sobre as entidades do banco.
 
-View: A "visão" em nossa API é a resposta JSON enviada ao cliente. Os Controllers são responsáveis por formatar e enviar essa resposta.
+View: A "visão" da nossa API é a resposta JSON enviada ao cliente.
 
-Controller: Responsável por receber as requisições HTTP, validar os dados e orquestrar a resposta. Eles são a porta de entrada da nossa aplicação.
+Controller: Responsável por ser a ponte entre o mundo HTTP e a lógica da aplicação. Ele recebe as requisições, extrai dados (body, params, query), chama o Service apropriado e formata a resposta JSON.
 
-Onde é usado: Nos arquivos *.controller.ts de cada módulo (ex: src/modules/users/user.controller.ts). A UserController manipula as rotas /users.
+Benefício: Mantém a lógica de HTTP (rotas, status codes, validação de entrada) completamente separada da lógica de negócio, tornando o código mais limpo e focado.
 
 Padrão Repository
 
-Este padrão abstrai e isola a camada de acesso aos dados. O resto da aplicação não precisa saber como as queries são executadas, apenas que existem métodos para buscar ou salvar dados.
+Este padrão cria uma ponte de abstração entre a lógica de negócio (Services) e a fonte de dados (banco de dados). Ele evita que a lógica de negócio se misture com a forma de acessar os dados (queries do Prisma).
 
-Como é usado: Criamos uma classe de repositório para cada entidade.
+Como é usado: Cada entidade (User, Group) possui sua própria classe de Repositório (ex: UsersRepository) que contém todos os métodos para interagir com o banco (create, findById, delete, etc.).
 
-Exemplo: A classe GroupsRepository (src/modules/groups/group.repository.ts) contém o método create, que é o único local que interage diretamente com o prisma.group para criar um novo grupo e adicionar seu primeiro membro. Isso centraliza a lógica de banco de dados e facilita os testes.
+Benefício Principal (Testabilidade): Este padrão é crucial para os testes. Nos testes unitários de um Service, podemos facilmente "mockar" (simular) o repositório, testando a lógica de negócio em isolamento, sem a necessidade de uma conexão real com o banco de dados.
+
+Benefício Secundário (Manutenção): Se um dia precisarmos otimizar uma query ou trocar de ORM, a alteração é feita em um único lugar (o repositório), sem impactar os Services que o utilizam.
 
 Padrão Service Layer (Camada de Serviço)
 
-A camada de serviço fica entre os Controllers e os Repositórios e contém toda a lógica de negócio da aplicação.
+É o coração da lógica de negócio da aplicação. Fica entre os Controllers e os Repositórios e orquestra as operações.
 
-Como é usado: Cada módulo possui sua classe de serviço.
+Como é usado: Cada entidade possui sua classe de Serviço (ex: UserService). O UserService é chamado pelo UserController e, por sua vez, chama os métodos do UsersRepository (ou de outros repositórios, se necessário).
 
-Exemplo: No UserService (src/modules/users/user.service.ts), o método create implementa a regra de negócio de verificar se um e-mail já existe e de realizar o hash da senha antes de chamar o repositório para salvar o usuário.
+Benefício (Lógica de Negócio Centralizada): Regras complexas vivem aqui. Por exemplo, no UserService, antes de criar um usuário, ele verifica se o e-mail já existe. Antes de atualizar, ele verifica se o novo e-mail não pertence a outro usuário. Isso impede que os Controllers fiquem "inchados" (Fat Controllers) e que regras de negócio vazem para outras camadas.
+
+Benefício (Reusabilidade): A mesma lógica de serviço pode ser reutilizada por diferentes interfaces no futuro (ex: uma API para um app mobile, um painel admin, etc.), pois ela não está acoplada ao Express.
 
 Injeção de Dependência (Dependency Injection)
 
-Em vez de uma classe criar suas próprias dependências, elas são "injetadas" de fora por um contêiner. Isso desacopla fortemente nossos componentes, melhora a modularidade e é fundamental para a testabilidade.
+É o padrão que "cola" todas as nossas camadas de forma desacoplada. Em vez de uma classe criar suas próprias dependências (ex: const repo = new UsersRepository() dentro do UserService), elas são "injetadas" de fora por um contêiner.
 
 Como é usado: Utilizamos a biblioteca TSyringe.
 
-Registro: No arquivo src/shared/container/index.ts, registramos nossas implementações (UsersRepository, GroupsRepository).
+Registro: No arquivo src/shared/container/index.ts, informamos ao contêiner como resolver as dependências (ex: "quando alguém pedir por IUsersRepository, entregue uma instância de UsersRepository").
 
-Injeção: Nas classes de serviço, usamos os decoradores @injectable() e @inject('UsersRepository') no construtor para receber as dependências automaticamente, sem precisar instanciá-las manualmente.
+Injeção: Nas classes de serviço, usamos @injectable() e @inject('UsersRepository') no construtor para receber as dependências.
+
+Benefício (Desacoplamento e Testabilidade): Este é o padrão que torna os outros realmente eficazes para testes. Como o UserService recebe o repositório no construtor, nos testes, podemos facilmente injetar um MockUsersRepository no lugar do real. Isso quebra as dependências diretas entre as classes, tornando o código modular, flexível e extremamente testável.
 
 Começando
 
@@ -132,7 +138,7 @@ content_copy
 expand_less
 
 git clone https://github.com/Allan177/sistema-de-criar-tarefas.git
-cd bd_e_pp-backend
+cd sistema-de-criar-tarefas
 
 Instale as dependências:
 
@@ -147,9 +153,9 @@ npm install
 
 Configure as variáveis de ambiente:
 
-Crie uma cópia do arquivo .env.example (se houver) ou crie um novo arquivo chamado .env na raiz do projeto.
+Crie um arquivo chamado .env na raiz do projeto.
 
-Abra o arquivo .env e adicione a URL de conexão do seu banco de dados PostgreSQL.
+Adicione a URL de conexão do seu banco de dados e a porta da aplicação.
 
 code
 Env
@@ -189,9 +195,23 @@ npm run dev
 
 O servidor estará em execução em http://localhost:3333.
 
-Uso da API
+Uso da API (Endpoints)
 
-A seguir, exemplos de como interagir com os endpoints já implementados.
+A seguir, a documentação do CRUD completo para os recursos implementados.
+
+Endpoints de Usuários (/api/v1/users)
+
+Listar todos os usuários
+
+Endpoint: GET /api/v1/users
+
+Descrição: Retorna uma lista de todos os usuários cadastrados (sem a senha).
+
+Buscar um usuário por ID
+
+Endpoint: GET /api/v1/users/:id
+
+Descrição: Retorna os detalhes de um usuário específico, incluindo os grupos dos quais ele faz parte e as tarefas pelas quais é responsável.
 
 Criar um novo usuário
 
@@ -199,91 +219,58 @@ Endpoint: POST /api/v1/users
 
 Descrição: Registra um novo usuário no sistema.
 
-Corpo da Requisição (Body):
+Corpo da Requisição: { "name": "...", "email": "...", "password": "..." }
 
-code
-JSON
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-{
+Atualizar um usuário
 
-    "name": "Estudante Exemplo",
+Endpoint: PUT /api/v1/users/:id
 
-    "email": "estudante@email.com",
+Descrição: Atualiza os dados de um usuário (nome, e-mail e/ou senha).
 
-    "password": "senhaSegura123"
-}
+Corpo da Requisição: { "name": "Novo Nome", "email": "novo@email.com" }
 
-Resposta de Sucesso (201 Created):
+Deletar um usuário
 
-code
-JSON
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-{
+Endpoint: DELETE /api/v1/users/:id
 
-    "id": 1,
+Descrição: Remove um usuário do sistema. Retorna status 204 No Content em caso de sucesso.
 
-    "name": "Estudante Exemplo",
+Endpoints de Grupos (/api/v1/groups)
 
-    "email": "estudante@email.com",
+Listar todos os grupos
 
-    "createdAt": "2025-08-21T18:30:00.000Z"
-}
+Endpoint: GET /api/v1/groups
+
+Descrição: Retorna uma lista de todos os grupos, incluindo os dados do criador e a contagem de membros.
+
+Buscar um grupo por ID
+
+Endpoint: GET /api/v1/groups/:id
+
+Descrição: Retorna os detalhes de um grupo específico, incluindo a lista de membros e as tarefas associadas.
+
 Criar um novo grupo
 
 Endpoint: POST /api/v1/groups
 
-Descrição: Cria um novo grupo de estudos. O usuário que cria o grupo é automaticamente adicionado como o primeiro membro.
+Descrição: Cria um novo grupo. O usuário criador é automaticamente adicionado como o primeiro membro.
 
-Corpo da Requisição (Body): É necessário que o createdBy seja um ID de um usuário existente.
+Corpo da Requisição: { "name": "...", "createdBy": ID_DO_USUARIO }
 
-code
-JSON
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-{
+Atualizar um grupo
 
-    "name": "Grupo de Estudos de Algoritmos",
+Endpoint: PUT /api/v1/groups/:id
 
-    "createdBy": 1 
-}
+Descrição: Atualiza o nome de um grupo.
 
-Resposta de Sucesso (201 Created):
+Corpo da Requisição: { "name": "Novo Nome do Grupo" }
 
-code
-JSON
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-{
+Deletar um grupo
 
-    "id": 1,
+Endpoint: DELETE /api/v1/groups/:id
 
-    "name": "Grupo de Estudos de Algoritmos",
+Descrição: Remove um grupo do sistema. Retorna status 204 No Content em caso de sucesso.
 
-    "createdBy": 1,
-
-    "createdAt": "2025-08-21T18:35:00.000Z",
-
-    "users": [
-        {
-            "groupId": 1,
-            "userId": 1
-        }
-    ]
-}
 Estrutura de Pastas
 code
 Code
@@ -292,20 +279,15 @@ content_copy
 expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
-
 .
 ├── prisma/
 │   └── schema.prisma         # Definição do banco de dados (Models)
 ├── src/
 │   ├── modules/              # Contêineres para cada recurso da aplicação
 │   │   ├── users/            # Exemplo de um módulo
-│   │   │   ├── user.controller.ts
-│   │   │   ├── user.repository.ts
-│   │   │   ├── user.routes.ts
-│   │   │   └── user.service.ts
 │   │   └── groups/
 │   ├── shared/               # Código compartilhado entre os módulos
-│   │   ├── container/        # Configuração da Injeção de Dependência (TSyringe)
+│   │   ├── container/        # Configuração da Injeção de Dependência
 │   │   ├── database/         # Conexão com o banco (Prisma)
 │   │   └── http/             # Configuração do Express (app, server, rotas)
 │   └── ...
