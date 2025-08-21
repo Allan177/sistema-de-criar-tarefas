@@ -227,7 +227,7 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
-  
+
     "id": 1,
 
     "name": "Estudante Exemplo",
@@ -252,7 +252,9 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
+
     "name": "Grupo de Estudos de Algoritmos",
+
     "createdBy": 1 
 }
 
@@ -266,10 +268,15 @@ expand_less
 IGNORE_WHEN_COPYING_START
 IGNORE_WHEN_COPYING_END
 {
+
     "id": 1,
+
     "name": "Grupo de Estudos de Algoritmos",
+
     "createdBy": 1,
+
     "createdAt": "2025-08-21T18:35:00.000Z",
+    
     "users": [
         {
             "groupId": 1,
