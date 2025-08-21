@@ -276,7 +276,7 @@ IGNORE_WHEN_COPYING_END
     "createdBy": 1,
 
     "createdAt": "2025-08-21T18:35:00.000Z",
-    
+
     "users": [
         {
             "groupId": 1,
@@ -295,20 +295,33 @@ IGNORE_WHEN_COPYING_END
 
 .
 ├── prisma/
-│   └── schema.prisma         # Definição do banco de dados (Models)
+
+│   └── schema.prisma 
+        # Definição do banco de dados (Models)
 ├── src/
-│   ├── modules/              # Contêineres para cada recurso da aplicação
-│   │   ├── users/            # Exemplo de um módulo
+
+│   ├── modules/  
+            # Contêineres para cada recurso da aplicação
+│   │   ├── users/ 
+           # Exemplo de um módulo
 │   │   │   ├── user.controller.ts
 │   │   │   ├── user.repository.ts
 │   │   │   ├── user.routes.ts
 │   │   │   └── user.service.ts
 │   │   └── groups/
-│   ├── shared/               # Código compartilhado entre os módulos
-│   │   ├── container/        # Configuração da Injeção de Dependência (TSyringe)
-│   │   ├── database/         # Conexão com o banco (Prisma)
-│   │   └── http/             # Configuração do Express (app, server, rotas)
+
+│   ├── shared/ 
+              # Código compartilhado entre os módulos
+│   │   ├── container/ 
+       # Configuração da Injeção de Dependência (TSyringe)
+│   │   ├── database/ 
+        # Conexão com o banco (Prisma)
+│   │   └── http/ 
+            # Configuração do Express (app, server, rotas)
 │   └── ...
-├── .env                      # Variáveis de ambiente (NÃO versionar)
+
+├── .env   
+                   # Variáveis de ambiente (NÃO versionar)
 ├── package.json
+
 └── tsconfig.json
